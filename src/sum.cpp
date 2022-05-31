@@ -3,91 +3,60 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define n 10
+#define n 16
 
-int a[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+int a[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 int a2[1000];
 
-int main(int argc, char* argv[])
-{
-
-	int pid, np,
-		elements_per_process,
-		n_elements_recieved;
-
-	MPI_Status status;
-	MPI_Init(&argc, &argv);
-
-	MPI_Comm_rank(MPI_COMM_WORLD, &pid);
-	MPI_Comm_size(MPI_COMM_WORLD, &np);
-
-	if (pid == 0) {
-		int index, i;
-		elements_per_process = n / np;
-
+int main(int argc, char* argv[]){
+ int ID, np, proses,hasil, sum=0;
+ double t1, t2; 
+ 
+ MPI_Status status;
+ MPI_Init(&argc, &argv);
+ 
+ t1 = MPI_Wtime();
+ 
+ MPI_Comm_rank(MPI_COMM_WORLD, &ID);
+ MPI_Comm_size(MPI_COMM_WORLD, &np);
+ 
+ if (ID == 0) {
+	int index, i;
+	proses = n / np;
 		if (np > 1) {
 			for (i = 1; i < np - 1; i++) {
-				index = i * elements_per_process;
-
-				MPI_Send(&elements_per_process,
-						1, MPI_INT, i, 0,
-						MPI_COMM_WORLD);
-				MPI_Send(&a[index],
-						elements_per_process,
-						MPI_INT, i, 0,
-						MPI_COMM_WORLD);
+				index = i * proses;
+				MPI_Send(&proses,1, MPI_INT, i, 0, MPI_COMM_WORLD);
+				MPI_Send(&a[index],proses,MPI_INT, i, 0,MPI_COMM_WORLD);
 			}
-
-			index = i * elements_per_process;
-			int elements_left = n - index;
-
-			MPI_Send(&elements_left,
-					1, MPI_INT,
-					i, 0,
-					MPI_COMM_WORLD);
-			MPI_Send(&a[index],
-					elements_left,
-					MPI_INT, i, 0,
-					MPI_COMM_WORLD);
+			index = i * proses;
+			int sisa = n - index;
+			MPI_Send(&sisa,1, MPI_INT,i, 0,	MPI_COMM_WORLD);
+			MPI_Send(&a[index],sisa,MPI_INT, i, 0,MPI_COMM_WORLD);
 		}
-
-		int sum = 0;
-		for (i = 0; i < elements_per_process; i++)
+		for (i = 0; i < proses; i++)
 			sum += a[i];
-
 		int tmp;
 		for (i = 1; i < np; i++) {
-			MPI_Recv(&tmp, 1, MPI_INT,
-					MPI_ANY_SOURCE, 0,
-					MPI_COMM_WORLD,
-					&status);
+			MPI_Recv(&tmp, 1, MPI_INT,MPI_ANY_SOURCE, 0,MPI_COMM_WORLD,	&status);
 			int sender = status.MPI_SOURCE;
-
 			sum += tmp;
+		printf("Hasil Sementara : %d\n", sum);
 		}
+		t2 = MPI_Wtime(); 
+		printf("Total : %d\n", sum);
+		printf( "Elapsed time is %f\n", t2 - t1 );
+	}else{
 
-		printf("Sum of array is : %d\n", sum);
-	}
-	else {
-		MPI_Recv(&n_elements_recieved,
-				1, MPI_INT, 0, 0,
-				MPI_COMM_WORLD,
-				&status);
-
-		MPI_Recv(&a2, n_elements_recieved,
-				MPI_INT, 0, 0,
-				MPI_COMM_WORLD,
-				&status);
+		MPI_Recv(&hasil,1, MPI_INT, 0, 0,MPI_COMM_WORLD,&status);
+		MPI_Recv(&a2, hasil,MPI_INT, 0, 0,MPI_COMM_WORLD,&status);
 
 		int partial_sum = 0;
-		for (int i = 0; i < n_elements_recieved; i++)
+		for (int i = 0; i < hasil; i++)
 			partial_sum += a2[i];
-
-		MPI_Send(&partial_sum, 1, MPI_INT,
-				0, 0, MPI_COMM_WORLD);
+		MPI_Send(&partial_sum, 1, MPI_INT,0, 0, MPI_COMM_WORLD);	
+		printf("Kirim Hasil : %d\n", partial_sum);
 	}
 	MPI_Finalize();
-
 	return 0;
 }
-
