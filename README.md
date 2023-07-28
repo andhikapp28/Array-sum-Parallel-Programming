@@ -38,8 +38,8 @@ To run the software on the virtual machine, follow these steps:
 
 ## Important Notes
 
-- Ensure to configure the virtual machine's resources adequately (e.g., RAM allocation and core/processor settings) to support efficient parallel execution.
-- The number of MPI processes used should match the number of available cores or processors. Using too many processes may result in communication overhead and poor performance.
-- This program serves as an example, assuming that you have correctly installed MPI on the virtual machine. If there are any issues related to MPI installation, make sure to refer to the appropriate installation guides.
+- Ensure to configure the virtual machine's resources adequately to support efficient parallel execution.
+- The number of MPI processes used should match the number of available cores or processors.
+- This program serves as an example, assuming that you have correctly installed MPI on the virtual machine. 
 
 ---
