@@ -28,20 +28,18 @@ To run the software on the virtual machine, follow these steps:
    ```
 
    Replace `<number_of_processes>` with the desired number of MPI processes you want to use. Make sure the number of processes does not exceed the number of available cores or processors on the virtual machine.
-
 5. The program will start running and perform the array calculation in parallel.
 
 ## How to Use
 
 1. After running the program, you may need to input initial data, depending on the program's implementation. The program might provide further instructions in the terminal.
-2. The program will process the array calculation in parallel using MPI. Monitor the program's output to see the calculation results.
-3. Once the program finishes running, you will obtain the array calculation results processed in parallel.
+2. The program will process the array calculation in parallel using MPI.
+3. Once the program finishes running, you will obtain the array calculation results processed in parallel and the time.
 
 ## Important Notes
 
 - Ensure to configure the virtual machine's resources adequately (e.g., RAM allocation and core/processor settings) to support efficient parallel execution.
 - The number of MPI processes used should match the number of available cores or processors. Using too many processes may result in communication overhead and poor performance.
-
 - This program serves as an example, assuming that you have correctly installed MPI on the virtual machine. If there are any issues related to MPI installation, make sure to refer to the appropriate installation guides.
 
 ---
