@@ -1,4 +1,4 @@
-# README
+# Array-sum-Parallel-Programming
 
 ## Program Description
 This software performs array calculations utilizing Parallel Programming techniques. **MPI (Message Passing Interface)** was chosen as the program's method.
